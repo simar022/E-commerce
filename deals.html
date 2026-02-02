@@ -52,60 +52,40 @@
                 <h3>Bhai-Log <br> Membership</h3>
                 <p>Free shipping forever. No minimums.</p>
             </div>
-            <button class="vibe-btn">Join Club</button>
+            <button class="vibe-btn" style="background: black; color: white;">Join Club</button>
         </div>
     </section>
 
-    <section class="comparison-section">
-        <h3>Why Digi-Adda?</h3>
-        <table class="comp-table">
-            <thead>
-                <tr>
-                    <th>Feature</th>
-                    <th>Generic Site</th>
-                    <th>Digi-Adda</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Build Quality</td>
-                    <td>Plastic-ky</td>
-                    <td>Premium Alloy</td>
-                </tr>
-                <tr>
-                    <td>Warranty</td>
-                    <td>6 Months</td>
-                    <td>2 Years Replacement</td>
-                </tr>
-                <tr>
-                    <td>Customer Support</td>
-                    <td>Bot Chat</td>
-                    <td>Real Human "Bhai"</td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+   <section class="comparison-section">
+    <div class="section-intro">
+        <h2 class="syne-font">The <span>Standard</span> We Live By</h2>
+        <p>Why settle for average when you can have the elite? We don't just sell tech; we provide peace of mind.</p>
+    </div>
 
-    <script>
-        // Theme Toggle Logic for this page
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            document.body.classList.toggle('light-mode');
-        });
+    <div class="comp-grid">
+        <div class="comp-card">
+            <div class="comp-icon">🏗️</div>
+            <h4>Built for the Grind</h4>
+            <p class="comp-desc">Generic brands use cheap recycled plastic that creaks. Our gear is forged from <strong>Grade-A Aerospace Alloy</strong> and reinforced polymers.</p>
+            <div class="vs-tag">Premium vs Plastic</div>
+        </div>
 
-        // Simple Countdown Timer
-        function startTimer() {
-            let time = 3600 * 5; // 5 hours
-            setInterval(() => {
-                let h = Math.floor(time / 3600);
-                let m = Math.floor((time % 3600) / 60);
-                let s = time % 60;
-                document.getElementById('timer').innerText = 
-                    `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-                time--;
-            }, 1000);
-        }
-        startTimer();
-    </script>
+        <div class="comp-card">
+            <div class="comp-icon">🛡️</div>
+            <h4>2-Year "No Sawal" Warranty</h4>
+            <p class="comp-desc">Most sites disappear after 6 months. We offer a <strong>24-month replacement guarantee</strong>. If it breaks, we swap it. Period.</p>
+            <div class="vs-tag">Long-Term vs Limited</div>
+        </div>
+
+        <div class="comp-card">
+            <div class="comp-icon">🤝</div>
+            <h4>Human-First Support</h4>
+            <p class="comp-desc">Stop talking to "Help-Bots." Get direct access to our <strong>Tech Bhai-Log</strong> who actually understand your setup and speak your language.</p>
+            <div class="vs-tag">Human vs Bot</div>
+        </div>
+    </div>
+</section>
+
+    <script src="script.js"></script>
 </body>
 </html>
