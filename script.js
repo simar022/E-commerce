@@ -1,19 +1,3 @@
-// Theme Persistence Logic
-const currentTheme = localStorage.getItem('theme') || 'light-mode';
-document.body.className = currentTheme;
-
-document.getElementById('theme-toggle').addEventListener('click', () => {
-    const newTheme = document.body.classList.contains('light-mode') ? 'dark-mode' : 'light-mode';
-    document.body.className = newTheme;
-    localStorage.setItem('theme', newTheme);
-});
-
-// Link products to Detail Page (Update your initCatalog function loop)
-// Change the <h3> to: <h3 onclick="viewProduct(${p.id})" style="cursor:pointer">${p.name}</h3>
-function viewProduct(id) {
-    window.location.href = `product.html?id=${id}`;
-}
-
 const products = [
     { id: 1, name: "BassPro Earbuds", price: 1499, imgID: "1590658268037-6bf12165a8df", desc: "Heavy bass, light on the pocket." },
     { id: 2, name: "FitBand Lite", price: 999, imgID: "1575311373937-040b8e1fd5b6", desc: "Track steps, not just time." },
@@ -33,34 +17,113 @@ const products = [
     { id: 9, name: "Webcam Privacy Cover", price: 149, imgID: "1585338107529-13afc5f02586", desc: "Secure your space instantly." }
 ];
 
-let cart = {};
+let cart = JSON.parse(localStorage.getItem('myCart')) || {};
 
-// Failsafe: If an image fails to load, use a generic tech placeholder
-function handleImgError(image) {
-    image.onerror = "";
-    image.src = "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500";
-    return true;
+function applyTheme() {
+    const savedVibe = localStorage.getItem('vibe') || 'light-mode';
+    document.body.className = savedVibe;
 }
+
+const themeBtn = document.getElementById('theme-toggle');
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        const isDark = document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode', !isDark);
+        localStorage.setItem('vibe', isDark ? 'dark-mode' : 'light-mode');
+    });
+}
+
+// window.onload = () => {
+//     applyTheme();
+//     updateCartUI(); 
+    
+//     const path = window.location.pathname;
+//     if (path.includes('index.html') || path === '/') initCatalog();
+//     if (path.includes('product.html')) initProductDetail();
+//     if (path.includes('deals.html')) initDealsPage();
+// };
+
+window.onload = () => {
+    applyTheme();
+    updateCartUI(); 
+    
+    const path = window.location.pathname;
+    
+    if (path.includes('product.html')) {
+        initProductDetail();
+    } else if (path.includes('deals.html')) {
+        initDealsPage();
+    } else {
+        initCatalog();
+    }
+};
 
 function initCatalog() {
     const grid = document.getElementById('catalog-grid');
-    grid.innerHTML = products.map(p => {
-        // Constructing the URL using the specific ID for maximum reliability
-        const imgUrl = `https://images.unsplash.com/photo-${p.imgID}?auto=format&fit=crop&w=500&q=80`;
-        
-        return `
-            <div class="card">
-                <img src="${imgUrl}" alt="${p.name}" onerror="handleImgError(this)" loading="lazy">
-                <h3>${p.name}</h3>
-                <p style="color: var(--text-dim); font-size: 0.8rem; margin: 5px 0;">${p.desc}</p>
-                <div class="price">₹${p.price.toLocaleString('en-IN')}</div>
-                <button class="add-btn" onclick="addToCart(${p.id})">Add to Bag</button>
-            </div>
-        `;
-    }).join('');
+    if (!grid) return;
+    grid.innerHTML = products.map(p => `
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-${p.imgID}?w=500" onclick="location.href='product.html?id=${p.id}'" style="cursor:pointer">
+            <h3 onclick="location.href='product.html?id=${p.id}'" style="cursor:pointer">${p.name}</h3>
+            <div class="price">₹${p.price.toLocaleString('en-IN')}</div>
+            <button class="add-btn" onclick="addToCart(${p.id})">Add to Bag</button>
+        </div>
+    `).join('');
 }
 
-// ... rest of your cart and theme toggle logic remains the same ...
+function initProductDetail() {
+    const container = document.getElementById('detail-view');
+    if (!container) return; 
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    
+    const p = products.find(item => item.id === parseInt(id));
+
+    if (p) {
+        container.innerHTML = `
+            <div class="product-img">
+                <img src="https://images.unsplash.com/photo-${p.imgID}?w=800" alt="${p.name}">
+            </div>
+            <div class="product-details">
+                <a href="index.html" class="back-link">← Back to Shop</a>
+                <h1>${p.name}</h1>
+                <p class="product-desc">${p.desc}</p>
+                
+                <div class="spec-list">
+                    <h4>Technical Aukaat</h4>
+                    <ul>
+                        ${p.specs ? p.specs.map(s => `<li>✅ ${s}</li>`).join('') : '<li>✅ High Quality Tech</li>'}
+                    </ul>
+                </div>
+                
+                <div class="price-action">
+                    <div class="detail-price">₹${p.price.toLocaleString('en-IN')}</div>
+                    <button class="add-btn" onclick="addToCart(${p.id})">Add to Bag</button>
+                </div>
+            </div>`;
+    } else {
+        container.innerHTML = `
+            <div style="text-align:center; padding: 50px; width: 100%;">
+                <h2>Product Gayab! (Not Found)</h2>
+                <a href="index.html" class="vibe-btn" style="display:inline-block; margin-top:20px;">Go Back to Shop</a>
+            </div>`;
+    }
+}
+function initDealsPage() {
+        function startTimer() {
+            let time = 3600 * 5; 
+            setInterval(() => {
+                let h = Math.floor(time / 3600);
+                let m = Math.floor((time % 3600) / 60);
+                let s = time % 60;
+                document.getElementById('timer').innerText = 
+                    `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                time--;
+            }, 1000);
+        }
+startTimer();
+}
 
 function addToCart(id) {
     if (cart[id]) {
@@ -69,7 +132,9 @@ function addToCart(id) {
         const product = products.find(p => p.id === id);
         cart[id] = { ...product, qty: 1 };
     }
+    localStorage.setItem('myCart', JSON.stringify(cart));
     updateCartUI();
+    if (document.getElementById('cart-drawer')) toggleCart();
 }
 
 function updateCartUI() {
@@ -113,9 +178,13 @@ function toggleCart() {
     document.getElementById('cart-drawer').classList.toggle('active');
 }
 
-document.getElementById('theme-toggle').addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    document.body.classList.toggle('light-mode');
-});
+function handleImgError(image) {
+    image.onerror = "";
+    image.src = "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500";
+    return true;
+}
 
-initCatalog();
+function viewProduct(id) {
+    window.location.href = `product.html?id=${id}`;
+}
+initDealsPage();
