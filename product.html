@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | Digi-Adda</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .detail-container { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; padding: 4rem 8%; align-items: start; }
+        .product-gallery img { width: 100%; border-radius: 20px; border: 2px solid var(--accent); }
+        .specs { margin-top: 2rem; padding: 1.5rem; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+        .specs h4 { color: var(--accent); margin-bottom: 1rem; }
+        .review-box { margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem; }
+        .review { background: var(--border); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; opacity: 0.9; }
+        @media (max-width: 768px) { .detail-container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body class="light-mode">
+
+    <nav>
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer">DIGI-<span>ADDA</span></div>
+        <div class="nav-actions">
+            <button id="theme-toggle" class="vibe-btn">Toggle Vibe</button>
+            <button class="cart-btn" onclick="window.location.href='index.html'">Back to Shop</button>
+        </div>
+    </nav>
+
+    <main class="detail-container" id="product-detail">
+        </main>
+
+    <script>
+        // Product Data (Should match your main script.js list)
+        const products = [
+            { id: 1, name: "BassPro Earbuds", price: 1499, imgID: "1590658268037-6bf12165a8df", battery: "40 Hours", driver: "10mm Dynamic", warranty: "1 Year" },
+            // ... (Include other products here or use a shared JS file)
+        ];
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        const p = products.find(item => item.id == productId) || products[0];
+
+        document.getElementById('product-detail').innerHTML = `
+            <div class="product-gallery">
+                <img src="https://images.unsplash.com/photo-${p.imgID}?auto=format&fit=crop&w=800&q=80" alt="${p.name}">
+            </div>
+            <div class="product-info">
+                <h1 style="font-family: 'Syne'; font-size: 3rem;">${p.name}</h1>
+                <div class="price" style="font-size: 2rem;">₹${p.price.toLocaleString('en-IN')}</div>
+                <p style="margin: 1.5rem 0; font-size: 1.1rem; line-height: 1.6;">This isn't just a gadget; it's a lifestyle upgrade. Perfect for those who want premium quality without the "branded" tax.</p>
+                
+                <div class="specs">
+                    <h4>Technical Aukaat (Specs)</h4>
+                    <p>🔋 Battery: ${p.battery || 'Long Lasting'}</p>
+                    <p>⚙️ Tech: ${p.driver || 'Next-Gen Internal'}</p>
+                    <p>🛡️ Warranty: ${p.warranty || '2 Years Digi-Assurance'}</p>
+                </div>
+
+                <div class="review-box">
+                    <h4>Customer Bakwaas (Reviews)</h4>
+                    <div class="review">
+                        <strong>Rahul M.</strong> ★★★★★ <br>
+                        "Bhai, original lag raha hai and sound is lethal. Best decision."
+                    </div>
+                    <div class="review">
+                        <strong>Simran K.</strong> ★★★★☆ <br>
+                        "Delivery was fast, but the orange box is too bright. Gadget is 10/10 though."
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Apply theme from LocalStorage
+        document.body.className = localStorage.getItem('theme') || 'light-mode';
+    </script>
+</body>
+</html>
