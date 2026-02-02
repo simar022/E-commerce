@@ -1,3 +1,19 @@
+// Theme Persistence Logic
+const currentTheme = localStorage.getItem('theme') || 'light-mode';
+document.body.className = currentTheme;
+
+document.getElementById('theme-toggle').addEventListener('click', () => {
+    const newTheme = document.body.classList.contains('light-mode') ? 'dark-mode' : 'light-mode';
+    document.body.className = newTheme;
+    localStorage.setItem('theme', newTheme);
+});
+
+// Link products to Detail Page (Update your initCatalog function loop)
+// Change the <h3> to: <h3 onclick="viewProduct(${p.id})" style="cursor:pointer">${p.name}</h3>
+function viewProduct(id) {
+    window.location.href = `product.html?id=${id}`;
+}
+
 const products = [
     { id: 1, name: "BassPro Earbuds", price: 1499, imgID: "1590658268037-6bf12165a8df", desc: "Heavy bass, light on the pocket." },
     { id: 2, name: "FitBand Lite", price: 999, imgID: "1575311373937-040b8e1fd5b6", desc: "Track steps, not just time." },
