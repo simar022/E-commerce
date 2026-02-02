@@ -19,6 +19,82 @@ const products = [
 
 let cart = JSON.parse(localStorage.getItem('myCart')) || {};
 
+function saveCart() {
+    localStorage.setItem('myCart', JSON.stringify(cart));
+}
+
+function addToCart(id) {
+    if (cart[id]) {
+        cart[id].qty += 1;
+    } else {
+        const product = products.find(p => p.id === id);
+        if (product) {
+            cart[id] = { ...product, qty: 1 };
+        }
+    }
+    
+    saveCart();     
+    updateCartUI();  
+    
+    const drawer = document.getElementById('cart-drawer');
+    if (drawer && !drawer.classList.contains('active')) {
+        toggleCart();
+    }
+}
+
+function changeQty(id, delta) {
+    if (!cart[id]) return;
+
+    cart[id].qty += delta;
+
+    if (cart[id].qty <= 0) {
+        delete cart[id];
+    }
+
+    saveCart();      
+    updateCartUI(); 
+}
+
+function updateCartUI() {
+    const list = document.getElementById('cart-items-list');
+    const totalEl = document.getElementById('cart-total');
+    const countEl = document.getElementById('cart-count');
+    
+    let totalItems = 0;
+    let totalPrice = 0;
+    
+    if (list) {
+        list.innerHTML = "";
+        
+        Object.values(cart).forEach(item => {
+            totalItems += item.qty;
+            totalPrice += (item.price * item.qty);
+            
+            list.innerHTML += `
+                <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid var(--border); padding-bottom:10px;">
+                    <div style="flex:1">
+                        <div style="font-weight:700">${item.name}</div>
+                        <div style="font-size:0.85rem; color:var(--accent)">₹${item.price.toLocaleString('en-IN')}</div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button class="qty-btn" onclick="changeQty(${item.id}, -1)" style="padding:2px 8px; cursor:pointer">-</button>
+                        <span style="font-weight:600">${item.qty}</span>
+                        <button class="qty-btn" onclick="changeQty(${item.id}, 1)" style="padding:2px 8px; cursor:pointer">+</button>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        Object.values(cart).forEach(item => {
+            totalItems += item.qty;
+            totalPrice += (item.price * item.qty);
+        });
+    }
+
+    if (countEl) countEl.innerText = totalItems;
+    if (totalEl) totalEl.innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
+}
+
 function applyTheme() {
     const savedVibe = localStorage.getItem('vibe') || 'light-mode';
     document.body.className = savedVibe;
@@ -32,16 +108,6 @@ if (themeBtn) {
         localStorage.setItem('vibe', isDark ? 'dark-mode' : 'light-mode');
     });
 }
-
-// window.onload = () => {
-//     applyTheme();
-//     updateCartUI(); 
-    
-//     const path = window.location.pathname;
-//     if (path.includes('index.html') || path === '/') initCatalog();
-//     if (path.includes('product.html')) initProductDetail();
-//     if (path.includes('deals.html')) initDealsPage();
-// };
 
 window.onload = () => {
     applyTheme();
@@ -101,7 +167,33 @@ function initProductDetail() {
                     <div class="detail-price">₹${p.price.toLocaleString('en-IN')}</div>
                     <button class="add-btn" onclick="addToCart(${p.id})">Add to Bag</button>
                 </div>
-            </div>`;
+                 <div class="reviews-section">
+                    <h3 class="syne-font" style="margin-bottom:20px;">Customer Bakwaas (Reviews)</h3>
+                    
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer-name">Ankit S.</span>
+                            <span class="stars">★★★★★</span>
+                        </div>
+                        <p style="font-size:0.9rem;">"Bhai, original item hai. I was worried it might be plastic-ky but it feels premium. Bass is lethal."</p>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer-name">Priya V.</span>
+                            <span class="stars">★★★★☆</span>
+                        </div>
+                        <p style="font-size:0.9rem;">"Delivery took 3 days, but product quality is 10/10. Looks killer in my setup."</p>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer-name">Suresh 'The Techie'</span>
+                            <span class="stars">★★★★★</span>
+                        </div>
+                        <p style="font-size:0.9rem;">"Best tech at this budget in India. No cap. Just buy it."</p>
+                    </div>
+             </div>`;
     } else {
         container.innerHTML = `
             <div style="text-align:center; padding: 50px; width: 100%;">
@@ -110,6 +202,7 @@ function initProductDetail() {
             </div>`;
     }
 }
+
 function initDealsPage() {
         function startTimer() {
             let time = 3600 * 5; 
@@ -124,56 +217,6 @@ function initDealsPage() {
         }
 startTimer();
 }
-
-function addToCart(id) {
-    if (cart[id]) {
-        cart[id].qty += 1;
-    } else {
-        const product = products.find(p => p.id === id);
-        cart[id] = { ...product, qty: 1 };
-    }
-    localStorage.setItem('myCart', JSON.stringify(cart));
-    updateCartUI();
-    if (document.getElementById('cart-drawer')) toggleCart();
-}
-
-function updateCartUI() {
-    const list = document.getElementById('cart-items-list');
-    const totalEl = document.getElementById('cart-total');
-    const countEl = document.getElementById('cart-count');
-    
-    let totalItems = 0, totalPrice = 0;
-    list.innerHTML = "";
-
-    Object.values(cart).forEach(item => {
-        totalItems += item.qty;
-        totalPrice += (item.price * item.qty);
-        list.innerHTML += `
-            <div class="cart-item">
-                <div style="flex:1">
-                    <div style="font-weight:700">${item.name}</div>
-                    <div style="font-size: 0.85rem">₹${item.price.toLocaleString('en-IN')}</div>
-                    <div style="margin-top:8px">
-                        <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
-                        <span style="margin: 0 10px">${item.qty}</span>
-                        <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
-                    </div>
-                </div>
-                <div style="font-weight:700">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
-            </div>
-        `;
-    });
-
-    countEl.innerText = totalItems;
-    totalEl.innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
-}
-
-function changeQty(id, delta) {
-    cart[id].qty += delta;
-    if (cart[id].qty <= 0) delete cart[id];
-    updateCartUI();
-}
-
 function toggleCart() {
     document.getElementById('cart-drawer').classList.toggle('active');
 }
@@ -187,4 +230,3 @@ function handleImgError(image) {
 function viewProduct(id) {
     window.location.href = `product.html?id=${id}`;
 }
-initDealsPage();
