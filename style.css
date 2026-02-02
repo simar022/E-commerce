@@ -197,6 +197,33 @@ body.dark-mode .comp-card {
     font-size: 0.95rem;
     color: var(--text);
 }
+.reviews-section {
+    margin-top: 4rem;
+    border-top: 2px solid var(--border);
+    padding-top: 3rem;
+}
+
+.review-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.stars { color: var(--accent); font-size: 0.9rem; }
+
+.reviewer-name { font-weight: 800; font-family: 'Syne'; }
+
+body.dark-mode .review-card {
+    background: rgba(255, 255, 255, 0.03);
+}
 
 @media (max-width: 900px) {
     .product-view-container {
@@ -204,3 +231,4 @@ body.dark-mode .comp-card {
         padding: 2rem 5%;
     }
 }
+
