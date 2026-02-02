@@ -60,3 +60,6 @@ nav { display: flex; justify-content: space-between; align-items: center; paddin
 body.dark-mode .card img {
     background: #252525;
 }
+.nav-links { display: flex; gap: 20px; margin: 0 20px; }
+.nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+.nav-links a:hover, .nav-links a.active { color: var(--accent); }
