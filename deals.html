@@ -23,15 +23,33 @@
 <body class="light-mode">
 
     <nav>
-        <div class="logo">DIGI-<span>ADDA</span></div>
+         <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">DIGI-<span>ADDA</span></div>
         <div class="nav-links">
             <a href="index.html">Shop</a>
             <a href="deals.html" class="active">Exclusives</a>
         </div>
-        <div class="nav-actions">
+         <div class="nav-actions">
             <button id="theme-toggle" class="vibe-btn">Toggle Vibe</button>
+            <button class="cart-btn" onclick="toggleCart()">
+                🛒 <span id="cart-count">0</span>
+            </button>
         </div>
     </nav>
+
+<div id="cart-drawer" class="cart-drawer">
+    <div class="cart-header">
+        <h3>Your Adda Bag</h3>
+        <button onclick="toggleCart()" class="close-btn">✕</button>
+    </div>
+    <div id="cart-items-list"></div>
+    <div class="cart-footer">
+        <div class="total-row">
+            <span>Grand Total</span>
+            <span id="cart-total">₹0</span>
+        </div>
+        <button class="checkout-btn">Checkout Now</button>
+    </div>
+</div>
 
     <header class="deals-hero">
         <h2>Midnight <span>Flash Sale</span></h2>
