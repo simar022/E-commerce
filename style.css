@@ -242,3 +242,22 @@ body.dark-mode .review-card {
         padding: 2rem 5%;
     }
 }
+
+.checkout-container { display: grid; grid-template-columns: 1.5fr 1fr; gap: 50px; padding: 4rem 8%; }
+
+.checkout-list { margin-top: 2rem; }
+.checkout-item { display: flex; align-items: center; gap: 20px; padding: 15px 0; border-bottom: 1px solid var(--border); }
+.checkout-item img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; }
+
+.order-card { background: var(--card); border: 2px solid var(--accent); padding: 30px; border-radius: 24px; position: sticky; top: 120px; }
+.bill-line { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 500; }
+.bill-line.total { font-size: 1.5rem; font-weight: 800; color: var(--accent); margin-top: 10px; }
+
+.pay-btn { width: 100%; padding: 20px; background: var(--accent); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+.pay-btn:hover { opacity: 0.9; transform: scale(1.02); }
+
+.upsell-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+.upsell-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 10px; }
+.upsell-card img { width: 50px; height: 50px; border-radius: 8px; }
+
+@media (max-width: 900px) { .checkout-container { grid-template-columns: 1fr; } }

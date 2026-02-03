@@ -59,41 +59,96 @@ function updateCartUI() {
     const list = document.getElementById('cart-items-list');
     const totalEl = document.getElementById('cart-total');
     const countEl = document.getElementById('cart-count');
+    const checkoutBtn = document.querySelector('.checkout-btn'); // Target the button
     
     let totalItems = 0;
     let totalPrice = 0;
     
-    if (list) {
-        list.innerHTML = "";
+    if (list) list.innerHTML = "";
+
+    Object.values(cart).forEach(item => {
+        totalItems += item.qty;
+        totalPrice += (item.price * item.qty);
         
-        Object.values(cart).forEach(item => {
-            totalItems += item.qty;
-            totalPrice += (item.price * item.qty);
-            
+        if (list) {
             list.innerHTML += `
-                <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid var(--border); padding-bottom:10px;">
+                <div class="cart-item">
                     <div style="flex:1">
                         <div style="font-weight:700">${item.name}</div>
                         <div style="font-size:0.85rem; color:var(--accent)">₹${item.price.toLocaleString('en-IN')}</div>
                     </div>
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <button class="qty-btn" onclick="changeQty(${item.id}, -1)" style="padding:2px 8px; cursor:pointer">-</button>
-                        <span style="font-weight:600">${item.qty}</span>
-                        <button class="qty-btn" onclick="changeQty(${item.id}, 1)" style="padding:2px 8px; cursor:pointer">+</button>
+                        <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+                        <span>${item.qty}</span>
+                        <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
                     </div>
                 </div>
             `;
-        });
-    } else {
-        Object.values(cart).forEach(item => {
-            totalItems += item.qty;
-            totalPrice += (item.price * item.qty);
-        });
-    }
+        }
+    });
 
+    // Update floating badges
     if (countEl) countEl.innerText = totalItems;
     if (totalEl) totalEl.innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
+
+    // --- NEW: LINK TO CHECKOUT PAGE ---
+    if (checkoutBtn) {
+        if (totalItems > 0) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.style.opacity = "1";
+            checkoutBtn.style.cursor = "pointer";
+            // Navigate to checkout.html when clicked
+            checkoutBtn.onclick = () => {
+                window.location.href = 'checkout.html';
+            };
+        } else {
+            checkoutBtn.disabled = true;
+            checkoutBtn.style.opacity = "0.5";
+            checkoutBtn.style.cursor = "not-allowed";
+            checkoutBtn.onclick = null;
+        }
+    }
 }
+
+// function updateCartUI() {
+//     const list = document.getElementById('cart-items-list');
+//     const totalEl = document.getElementById('cart-total');
+//     const countEl = document.getElementById('cart-count');
+    
+//     let totalItems = 0;
+//     let totalPrice = 0;
+    
+//     if (list) {
+//         list.innerHTML = "";
+        
+//         Object.values(cart).forEach(item => {
+//             totalItems += item.qty;
+//             totalPrice += (item.price * item.qty);
+            
+//             list.innerHTML += `
+//                 <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid var(--border); padding-bottom:10px;">
+//                     <div style="flex:1">
+//                         <div style="font-weight:700">${item.name}</div>
+//                         <div style="font-size:0.85rem; color:var(--accent)">₹${item.price.toLocaleString('en-IN')}</div>
+//                     </div>
+//                     <div style="display:flex; align-items:center; gap:10px;">
+//                         <button class="qty-btn" onclick="changeQty(${item.id}, -1)" style="padding:2px 8px; cursor:pointer">-</button>
+//                         <span style="font-weight:600">${item.qty}</span>
+//                         <button class="qty-btn" onclick="changeQty(${item.id}, 1)" style="padding:2px 8px; cursor:pointer">+</button>
+//                     </div>
+//                 </div>
+//             `;
+//         });
+//     } else {
+//         Object.values(cart).forEach(item => {
+//             totalItems += item.qty;
+//             totalPrice += (item.price * item.qty);
+//         });
+//     }
+
+//     if (countEl) countEl.innerText = totalItems;
+//     if (totalEl) totalEl.innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
+// }
 
 function applyTheme() {
     const savedVibe = localStorage.getItem('vibe') || 'light-mode';
@@ -119,10 +174,12 @@ window.onload = () => {
         initProductDetail();
     } else if (path.includes('deals.html')) {
         initDealsPage();
+    } else if (path.includes('checkout.html')) {
+        initCheckoutPage();
     } else {
         initCatalog();
     }
-};
+}
 
 function initCatalog() {
     const grid = document.getElementById('catalog-grid');
@@ -217,6 +274,68 @@ function initDealsPage() {
         }
 startTimer();
 }
+
+function initCheckoutPage() {
+    const list = document.getElementById('checkout-items-list');
+    const upsellGrid = document.getElementById('upsell-grid');
+    if (!list) return;
+
+    let subtotal = 0;
+    list.innerHTML = "";
+
+    Object.values(cart).forEach(item => {
+        subtotal += (item.price * item.qty);
+        list.innerHTML += `
+            <div class="checkout-item">
+                <img src="https://images.unsplash.com/photo-${item.imgID}?w=150">
+                <div style="flex:1">
+                    <h4 class="syne-font">${item.name}</h4>
+                    <p>Qty: ${item.qty} × ₹${item.price}</p>
+                </div>
+                <div style="font-weight:700">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
+            </div>
+        `;
+    });
+
+    const tax = subtotal * 0.18;
+    const total = subtotal + tax;
+
+    document.getElementById('subtotal').innerText = `₹${subtotal.toLocaleString('en-IN')}`;
+    document.getElementById('tax').innerText = `₹${tax.toLocaleString('en-IN')}`;
+    document.getElementById('grand-total').innerText = `₹${total.toLocaleString('en-IN')}`;
+
+    const shuffled = products.sort(() => 0.5 - Math.random());
+    const recommendations = shuffled.slice(0, 2);
+    
+    upsellGrid.innerHTML = recommendations.map(p => `
+        <div class="upsell-card">
+            <img src="https://images.unsplash.com/photo-${p.imgID}?w=100">
+            <div style="flex:1">
+                <div style="font-size:0.8rem; font-weight:700;">${p.name}</div>
+                <div style="font-size:0.75rem; color:var(--accent);">₹${p.price}</div>
+            </div>
+            <button onclick="addToCart(${p.id}); location.reload();" class="vibe-btn" style="padding:5px 10px; font-size:0.7rem;">+ Add</button>
+        </div>
+    `).join('');
+}
+
+function processOrder() {
+    if (Object.keys(cart).length === 0) {
+        alert("Bhai, cart empty hai! Add something first.");
+        return;
+    }
+    
+    document.body.innerHTML = `
+        <div style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:var(--bg); color:var(--text);">
+            <h1 class="syne-font" style="font-size:5rem; color:var(--accent);">SUCCESS!</h1>
+            <p style="font-size:1.5rem;">Your gear is being packed by the Bhai-Log.</p>
+            <p style="opacity:0.6;">Order ID: #DIGI${Math.floor(Math.random()*90000) + 10000}</p>
+            <button onclick="location.href='index.html'" class="pay-btn" style="width:200px; margin-top:30px;">Go Back Home</button>
+        </div>
+    `;
+    localStorage.removeItem('myCart'); 
+}
+
 function toggleCart() {
     document.getElementById('cart-drawer').classList.toggle('active');
 }

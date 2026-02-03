@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Digi-Adda</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="light-mode">
+
+    <nav>
+        <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">DIGI-<span>ADDA</span></div>
+        <div class="nav-actions">
+            <button id="theme-toggle" class="vibe-btn">Toggle Vibe</button>
+        </div>
+    </nav>
+
+    <main class="checkout-container">
+        <div class="checkout-left">
+            <h2 class="syne-font">Final <span>Summary</span></h2>
+            <div id="checkout-items-list" class="checkout-list">
+                </div>
+
+            <div class="upsell-section">
+                <h3 class="syne-font">Buy Together <span>Deals</span></h3>
+                <p>Add these to your kit for a complete setup.</p>
+                <div id="upsell-grid" class="upsell-grid">
+                    </div>
+            </div>
+        </div>
+
+        <div class="checkout-right">
+            <div class="order-card">
+                <h3 class="syne-font">Billing Details</h3>
+                <div class="bill-line"><span>Subtotal</span> <span id="subtotal">₹0</span></div>
+                <div class="bill-line"><span>Shipping</span> <span style="color:var(--accent)">FREE</span></div>
+                <div class="bill-line"><span>GST (18%)</span> <span id="tax">₹0</span></div>
+                <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
+                <div class="bill-line total"><span>Total Aukaat</span> <span id="grand-total">₹0</span></div>
+                
+                <button class="pay-btn" onclick="processOrder()">Pay Now & Secure Gear</button>
+                <p style="font-size: 0.8rem; text-align: center; margin-top: 15px; opacity: 0.6;">Secure 256-bit Encrypted Payment</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
