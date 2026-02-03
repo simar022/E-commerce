@@ -47,6 +47,18 @@ nav { display: flex; justify-content: space-between; align-items: center; paddin
 .total-row { display: flex; justify-content: space-between; font-weight: 800; font-size: 1.3rem; margin: 2rem 0; }
 .checkout-btn { width: 100%; padding: 15px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; }
 
+.deals-hero { padding: 4rem 8%; background: var(--card); border-bottom: 2px solid var(--accent); text-align: center; }
+        .timer-container { margin-top: 20px; font-family: 'Syne'; font-size: 2rem; color: var(--accent); }
+        
+        .comparison-section { padding: 4rem 8%; }
+        .comp-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        .comp-table th, .comp-table td { padding: 1.5rem; border: 1px solid var(--border); text-align: left; }
+        .comp-table th { background: var(--accent); color: white; }
+        
+        .exclusive-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 2rem 8%; }
+        .feat-card { background: var(--accent); color: white; padding: 2rem; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; }
+        .feat-card h3 { font-family: 'Syne'; font-size: 2rem; }
+
 .card img {
     width: 100%;
     height: 200px;
@@ -144,7 +156,6 @@ body.dark-mode .comp-card {
     backdrop-filter: blur(10px);
 }
 
-/* Product Detail Page Layout */
 .product-view-container {
     display: flex;
     gap: 60px;
@@ -231,4 +242,3 @@ body.dark-mode .review-card {
         padding: 2rem 5%;
     }
 }
-
