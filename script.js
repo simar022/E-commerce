@@ -5,16 +5,15 @@ const products = [
     { id: 4, name: "Silent Click Mouse", price: 499, imgID: "1527864550417-7fd91fc51a46", desc: "Work in peace, zero noise." },
     { id: 5, name: "RGB Desk Strip", price: 399, imgID: "1550009158-9ebf69173e03", desc: "Instant mood lighting for your setup." },
     { id: 6, name: "Laptop Stand Pro", price: 1199, imgID: "1527443224154-c4a3942d3acf", desc: "Save your neck, work better." },
-    { id: 10, name: "Gaming Pad XL", price: 599, imgID: "1616628188502-413f2fe46e5e", desc: "Smooth glide for high stakes." },
-    { id: 11, name: "Smart Bulb (WiFi)", price: 699, imgID: "1550985616-10810253b84d", desc: "Control your room from your phone." },
     { id: 7, name: "Mini BT Speaker", price: 899, imgID: "1608156639585-34054e815958", desc: "Pocket-sized party starter." },
     { id: 8, name: "Type-C Braided Cable", price: 299, imgID: "1588505794041-9c35a630985a", desc: "Unbreakable charging solution." },
+    { id: 9, name: "Webcam Privacy Cover", price: 149, imgID: "1585338107529-13afc5f02586", desc: "Secure your space instantly." },
+    { id: 10, name: "Gaming Pad XL", price: 599, imgID: "1616628188502-413f2fe46e5e", desc: "Smooth glide for high stakes." },
+    { id: 11, name: "Smart Bulb (WiFi)", price: 699, imgID: "1550985616-10810253b84d", desc: "Control your room from your phone." },
+    { id: 12, name: "Phone Tripod Mount", price: 450, imgID: "1586105251261-72a756654ff1", desc: "Perfect for steady reels." },
     { id: 13, name: "Wireless Keyboard", price: 1899, imgID: "1587829741301-dc798b83dadc", desc: "Clean desk, no wires." },
     { id: 14, name: "USB Hub 4-Port", price: 650, imgID: "1618410313554-15962776856c", desc: "Connect everything at once." },
-    { id: 12, name: "Phone Tripod Mount", price: 450, imgID: "1586105251261-72a756654ff1", desc: "Perfect for steady reels." },
-    { id: 15, name: "Earphone Hard Case", price: 199, imgID: "1544650030-3c51ad35730d", desc: "Protect your audio gear." },
-    { id: 16, name: "Cable Organizer Clip", price: 99, imgID: "1591485423007-765bde4139ef", desc: "Tame the wire jungle." },
-    { id: 9, name: "Webcam Privacy Cover", price: 149, imgID: "1585338107529-13afc5f02586", desc: "Secure your space instantly." }
+    { id: 15, name: "Earphone Hard Case", price: 199, imgID: "1544650030-3c51ad35730d", desc: "Protect your audio gear." }
 ];
 
 let cart = JSON.parse(localStorage.getItem('myCart')) || {};
@@ -59,7 +58,7 @@ function updateCartUI() {
     const list = document.getElementById('cart-items-list');
     const totalEl = document.getElementById('cart-total');
     const countEl = document.getElementById('cart-count');
-    const checkoutBtn = document.querySelector('.checkout-btn'); // Target the button
+    const checkoutBtn = document.querySelector('.checkout-btn');
     
     let totalItems = 0;
     let totalPrice = 0;
@@ -87,17 +86,14 @@ function updateCartUI() {
         }
     });
 
-    // Update floating badges
     if (countEl) countEl.innerText = totalItems;
     if (totalEl) totalEl.innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
 
-    // --- NEW: LINK TO CHECKOUT PAGE ---
     if (checkoutBtn) {
         if (totalItems > 0) {
             checkoutBtn.disabled = false;
             checkoutBtn.style.opacity = "1";
             checkoutBtn.style.cursor = "pointer";
-            // Navigate to checkout.html when clicked
             checkoutBtn.onclick = () => {
                 window.location.href = 'checkout.html';
             };
@@ -109,46 +105,6 @@ function updateCartUI() {
         }
     }
 }
-
-// function updateCartUI() {
-//     const list = document.getElementById('cart-items-list');
-//     const totalEl = document.getElementById('cart-total');
-//     const countEl = document.getElementById('cart-count');
-    
-//     let totalItems = 0;
-//     let totalPrice = 0;
-    
-//     if (list) {
-//         list.innerHTML = "";
-        
-//         Object.values(cart).forEach(item => {
-//             totalItems += item.qty;
-//             totalPrice += (item.price * item.qty);
-            
-//             list.innerHTML += `
-//                 <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid var(--border); padding-bottom:10px;">
-//                     <div style="flex:1">
-//                         <div style="font-weight:700">${item.name}</div>
-//                         <div style="font-size:0.85rem; color:var(--accent)">₹${item.price.toLocaleString('en-IN')}</div>
-//                     </div>
-//                     <div style="display:flex; align-items:center; gap:10px;">
-//                         <button class="qty-btn" onclick="changeQty(${item.id}, -1)" style="padding:2px 8px; cursor:pointer">-</button>
-//                         <span style="font-weight:600">${item.qty}</span>
-//                         <button class="qty-btn" onclick="changeQty(${item.id}, 1)" style="padding:2px 8px; cursor:pointer">+</button>
-//                     </div>
-//                 </div>
-//             `;
-//         });
-//     } else {
-//         Object.values(cart).forEach(item => {
-//             totalItems += item.qty;
-//             totalPrice += (item.price * item.qty);
-//         });
-//     }
-
-//     if (countEl) countEl.innerText = totalItems;
-//     if (totalEl) totalEl.innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
-// }
 
 function applyTheme() {
     const savedVibe = localStorage.getItem('vibe') || 'light-mode';
@@ -181,17 +137,29 @@ window.onload = () => {
     }
 }
 
+
 function initCatalog() {
     const grid = document.getElementById('catalog-grid');
     if (!grid) return;
-    grid.innerHTML = products.map(p => `
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-${p.imgID}?w=500" onclick="location.href='product.html?id=${p.id}'" style="cursor:pointer">
-            <h3 onclick="location.href='product.html?id=${p.id}'" style="cursor:pointer">${p.name}</h3>
-            <div class="price">₹${p.price.toLocaleString('en-IN')}</div>
-            <button class="add-btn" onclick="addToCart(${p.id})">Add to Bag</button>
-        </div>
-    `).join('');
+
+    grid.innerHTML = products.map(p => {
+        const imgUrl = `https://images.unsplash.com/photo-${p.imgID}?auto=format&fit=crop&w=500&q=80`;
+        
+        return `
+            <div class="card">
+                <div class="img-container" style="overflow:hidden; border-radius:12px; height:200px;">
+                    <img src="${imgUrl}" 
+                         alt="${p.name}" 
+                         onclick="location.href='product.html?id=${p.id}'" 
+                         style="cursor:pointer; width:100%; height:100%; object-fit:cover;"
+                         onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500'">
+                </div>
+                <h3 onclick="location.href='product.html?id=${p.id}'" style="cursor:pointer; margin-top:15px;">${p.name}</h3>
+                <div class="price">₹${p.price.toLocaleString('en-IN')}</div>
+                <button class="add-btn" onclick="addToCart(${p.id})">Add to Bag</button>
+            </div>
+        `;
+    }).join('');
 }
 
 function initProductDetail() {
@@ -348,4 +316,35 @@ function handleImgError(image) {
 
 function viewProduct(id) {
     window.location.href = `product.html?id=${id}`;
+}
+
+function openPaymentGateway() {
+    if (Object.keys(cart).length === 0) return alert("Cart is empty!");
+    const total = document.getElementById('grand-total').innerText;
+    document.getElementById('modal-amount').innerText = total;
+    document.getElementById('payment-modal').style.display = 'flex';
+}
+
+function simulateSuccess() {
+    const modal = document.getElementById('payment-modal');
+    modal.innerHTML = `<div class="payment-window"><h2>Verifying Payment...</h2><div class="spinner"></div></div>`;
+    
+    setTimeout(() => {
+        // 1. Hide Checkout, Show Tracker
+        document.getElementById('main-checkout-view').style.display = 'none';
+        document.getElementById('payment-modal').style.display = 'none';
+        document.getElementById('tracker-view').style.display = 'block';
+        
+        // 2. Generate Random Order ID
+        const orderId = "DA-" + Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('order-id-display').innerText = orderId;
+
+        // 3. Clear Cart
+        cart = {};
+        localStorage.removeItem('myCart');
+        updateCartUI();
+        
+        // 4. Save Order to History (Optional)
+        localStorage.setItem('lastOrder', orderId);
+    }, 2000);
 }
