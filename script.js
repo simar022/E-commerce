@@ -317,34 +317,79 @@ function handleImgError(image) {
 function viewProduct(id) {
     window.location.href = `product.html?id=${id}`;
 }
-
+// Open Modal
 function openPaymentGateway() {
-    if (Object.keys(cart).length === 0) return alert("Cart is empty!");
+    if (Object.keys(cart).length === 0) return alert("Bhai, cart khali hai!");
     const total = document.getElementById('grand-total').innerText;
-    document.getElementById('modal-amount').innerText = total;
-    document.getElementById('payment-modal').style.display = 'flex';
+    document.getElementById('razor-amount').innerText = total;
+    document.getElementById('razor-order-id').innerText = Math.floor(100000 + Math.random() * 900000);
+    document.getElementById('payment-modal').style.display = "flex";
 }
 
-function simulateSuccess() {
-    const modal = document.getElementById('payment-modal');
-    modal.innerHTML = `<div class="payment-window"><h2>Verifying Payment...</h2><div class="spinner"></div></div>`;
+// Tab Switching
+function switchTab(evt, tabId) {
+    const panels = document.querySelectorAll('.tab-panel');
+    const tabs = document.querySelectorAll('.pay-tab');
+    panels.forEach(p => p.classList.remove('active'));
+    tabs.forEach(t => t.classList.remove('active'));
     
+    document.getElementById(tabId + '-panel').classList.add('active');
+    evt.currentTarget.classList.add('active');
+}
+
+// Simulation & Invoice
+function simulateSuccess() {
+    const payBtn = document.querySelector('.pay-now-btn');
+    payBtn.innerText = "Processing Payment...";
+    payBtn.disabled = true;
+
+    // Grab purchase details for the invoice
+    const orderId = "#DA-" + document.getElementById('razor-order-id').innerText;
+    const finalTotal = document.getElementById('grand-total').innerText;
+    const itemsList = Object.values(cart).map(i => `${i.name} (x${i.qty}) - ₹${i.price * i.qty}`).join('\n');
+
     setTimeout(() => {
-        // 1. Hide Checkout, Show Tracker
-        document.getElementById('main-checkout-view').style.display = 'none';
-        document.getElementById('payment-modal').style.display = 'none';
-        document.getElementById('tracker-view').style.display = 'block';
-        
-        // 2. Generate Random Order ID
-        const orderId = "DA-" + Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('payment-modal').style.display = "none";
+        document.getElementById('main-checkout-view').style.display = "none";
+        document.getElementById('tracker-view').style.display = "block";
         document.getElementById('order-id-display').innerText = orderId;
 
-        // 3. Clear Cart
+        // Auto-add Invoice Download Button
+        const container = document.querySelector('.order-success-card');
+        const invoiceBtn = document.createElement('button');
+        invoiceBtn.className = "vibe-btn";
+        invoiceBtn.style.background = "#2ecc71";
+        invoiceBtn.style.marginTop = "20px";
+        invoiceBtn.innerHTML = "Download Invoice 📄";
+        invoiceBtn.onclick = () => generateInvoice(orderId, finalTotal, itemsList);
+        container.appendChild(invoiceBtn);
+
+        // Clear Cart
         cart = {};
         localStorage.removeItem('myCart');
         updateCartUI();
-        
-        // 4. Save Order to History (Optional)
-        localStorage.setItem('lastOrder', orderId);
     }, 2000);
+}
+
+function generateInvoice(id, total, items) {
+    const content = `
+    DIGI-ADDA OFFICIAL INVOICE
+    --------------------------
+    Order ID: ${id}
+    Date: ${new Date().toLocaleDateString()}
+    
+    Items Purchased:
+    ${items}
+    
+    --------------------------
+    TOTAL: ${total}
+    Payment: Verified via Razorpay
+    --------------------------
+    Thanks for shopping with Digi-Adda!
+    `;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Invoice_${id}.txt`;
+    link.click();
 }

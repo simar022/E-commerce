@@ -93,38 +93,54 @@
     </main>
 
     <div id="payment-modal" class="modal-overlay">
-        <div class="payment-window">
-            <div class="pay-header">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/UPI-Logo.png" height="30" alt="UPI">
-                <span>Secure Checkout</span>
-            </div>
-            <div class="pay-body">
-                <p>Amount to Pay: <strong id="modal-amount">₹0</strong></p>
-                <div class="qr-placeholder">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=DigiAddaPayment" alt="QR Code">
-                    <p>Scan to Pay via UPI</p>
+    <div class="payment-window">
+        <div class="razor-header">
+            <div class="razor-left">
+                <div class="logo-circle">DA</div>
+                <div>
+                    <p class="store-name">Digi-Adda Store</p>
+                    <p class="order-id-label">Order #<span id="razor-order-id">...</span></p>
                 </div>
-                <button class="vibe-btn" style="width:100%" onclick="simulateSuccess()">Simulate Successful Payment</button>
             </div>
+            <div class="razor-right">
+                <p id="razor-amount">₹0</p>
+            </div>
+        </div>
+
+        <div class="razor-body">
+            <div class="payment-sidebar">
+                <button class="pay-tab active" onclick="switchTab(event, 'upi')">📱 UPI</button>
+                <button class="pay-tab" onclick="switchTab(event, 'card')">💳 Card</button>
+                <button class="pay-tab" onclick="switchTab(event, 'cod')">💵 COD</button>
+            </div>
+            <div class="payment-content">
+                <div id="upi-panel" class="tab-panel active">
+                    <p>Scan QR to Pay</p>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=DigiAdda" alt="QR">
+                    </div>
+                    <p class="small-text">Accepts GPay, PhonePe, Paytm</p>
+                </div>
+                <div id="card-panel" class="tab-panel">
+                    <input type="text" placeholder="Card Number" class="razor-input">
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" placeholder="MM/YY" class="razor-input">
+                        <input type="password" placeholder="CVV" class="razor-input">
+                    </div>
+                    <input type="text" placeholder="Card Holder Name" class="razor-input">
+                </div>
+                <div id="cod-panel" class="tab-panel">
+                    <p>Cash on Delivery</p>
+                    <p class="small-text">Pay at your doorstep via Cash or UPI.</p>
+                </div>
+            </div>
+        </div>
+        <div class="razor-footer">
+            <button class="pay-now-btn" onclick="simulateSuccess()">Pay & Confirm Order</button>
+            <p class="secure-text">🔒 Razorpay Trusted | Secure Checkout</p>
         </div>
     </div>
-
-    <main class="tracker-container" id="tracker-view" style="display:none;">
-        <div class="order-success-card">
-            <div class="confetti-icon">🎉</div>
-            <h1 class="syne-font">Order <span>Confirmed!</span></h1>
-            <p>Order ID: <span id="order-id-display">#DA-0000</span></p>
-            
-            <div class="tracking-stepper">
-                <div class="step active"><span>✓</span><p>Confirmed</p></div>
-                <div class="step active"><span>✓</span><p>Processing</p></div>
-                <div class="step pulse"><span>🚚</span><p>On the Way</p></div>
-                <div class="step"><span>🏠</span><p>Delivered</p></div>
-            </div>
-            
-            <button class="vibe-btn" onclick="location.href='index.html'">Back to Shop</button>
-        </div>
-    </main>
+</div>
 
     <script src="script.js"></script>
 </body>
