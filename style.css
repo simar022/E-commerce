@@ -262,7 +262,6 @@ body.dark-mode .review-card {
 
 @media (max-width: 900px) { .checkout-container { grid-template-columns: 1fr; } }
 
-/* Payment Modal */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
@@ -309,3 +308,52 @@ body.dark-mode .review-card {
 .secure-text { font-size: 0.7rem; margin-top: 10px; opacity: 0.6; }
 
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+
+.card {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-color: var(--accent);
+}
+
+@keyframes cartPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.cart-icon-active {
+    animation: cartPulse 0.4s ease-out;
+}
+.search-container {
+    position: relative;
+    max-width: 400px;
+    margin: 0 20px;
+    flex-grow: 1;
+}
+
+#product-search {
+    width: 100%;
+    padding: 10px 40px 10px 15px;
+    border-radius: 25px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#product-search:focus {
+    border-color: var(--accent);
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+}
