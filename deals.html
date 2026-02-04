@@ -6,9 +6,6 @@
     <title>Exclusives | Digi-Adda</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        
-    </style>
 </head>
 <body class="light-mode">
 
@@ -18,6 +15,10 @@
             <a href="index.html">Shop</a>
             <a href="deals.html" class="active">Exclusives</a>
         </div>
+        <div class="search-container">
+    <input type="text" id="product-search" placeholder="Search gear (e.g. Mouse, Cable...)" oninput="filterProducts()">
+    <span class="search-icon">🔍</span>
+</div>
          <div class="nav-actions">
             <button id="theme-toggle" class="vibe-btn">Toggle Vibe</button>
             <button class="cart-btn" onclick="toggleCart()">

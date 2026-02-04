@@ -149,19 +149,53 @@ function renderGrid(productsArray) {
     }
 
     grid.innerHTML = productsArray.map(p => `
+        
+
         <div class="card">
-            <div class="card-img-container">
-                <img src="https://images.unsplash.com/photo-${p.imgID}?auto=format&fit=crop&w=600&q=80" 
-                     alt="${p.name}" onclick="viewProduct(${p.id})">
-            </div>
-            <div class="card-content">
-                <h3 onclick="viewProduct(${p.id})">${p.name}</h3>
-                <p>${p.desc}</p>
-                <div class="price">₹${p.price.toLocaleString('en-IN')}</div>
-                <button class="add-btn" onclick="addToCart(${p.id})">Add to Bag</button>
-            </div>
+        <div class="card-img-container">
+            <img src="https://images.unsplash.com/photo-${p.imgID}?w=600" alt="${p.name}">
+            <button class="qv-trigger-btn" onclick="openQuickView(${p.id})">Quick View</button>
+        </div>
         </div>
     `).join('');
+}
+
+function openQuickView(id) {
+    const p = products.find(item => item.id === id);
+    const modal = document.getElementById('quickview-modal');
+    const body = document.getElementById('qv-body');
+
+    if (p) {
+        body.innerHTML = `
+            <div class="qv-img">
+                <img src="https://images.unsplash.com/photo-${p.imgID}?w=800" alt="${p.name}">
+            </div>
+            <div class="qv-details">
+                <h2 class="syne-font" style="font-size: 2rem; margin-bottom: 10px;">${p.name}</h2>
+                <div class="price" style="font-size: 1.5rem; color: var(--accent); margin-bottom: 15px;">
+                    ₹${p.price.toLocaleString('en-IN')}
+                </div>
+                <p style="margin-bottom: 25px; line-height: 1.6; opacity: 0.8;">${p.desc}</p>
+                <div style="display: flex; gap: 15px;">
+                    <button class="add-btn" onclick="addToCart(${p.id}); closeQuickView();" style="flex: 2;">
+                        Add to Bag
+                    </button>
+                    <button class="vibe-btn" onclick="viewProduct(${p.id})" style="flex: 1; padding: 12px;">
+                        Full Details
+                    </button>
+                </div>
+            </div>
+        `;
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden"; 
+    }
+}
+
+function closeQuickView(event) {
+    if (event && event.target !== document.getElementById('quickview-modal')) return;
+    
+    document.getElementById('quickview-modal').style.display = "none";
+    document.body.style.overflow = "auto"; 
 }
 
 window.onload = () => {

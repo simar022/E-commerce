@@ -44,7 +44,13 @@
             <button class="checkout-btn">Checkout Now</button>
         </div>
     </div>
-
+<div id="quickview-modal" class="modal-overlay" onclick="closeQuickView(event)">
+    <div class="quickview-content" onclick="event.stopPropagation()">
+        <button class="close-qv" onclick="closeQuickView()">✕</button>
+        <div id="qv-body" class="qv-grid">
+            </div>
+    </div>
+</div>
     <script src="script.js"></script>
 </body>
 </html>
