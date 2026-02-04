@@ -104,6 +104,16 @@ function updateCartUI() {
             checkoutBtn.onclick = null;
         }
     }
+
+    if (Object.keys(cart).length === 0) {
+    list.innerHTML = `
+        <div style="text-align:center; padding:40px; opacity:0.5;">
+            <div style="font-size:3rem;">🛒</div>
+            <p class="syne-font">Your bag is empty, Bhai!</p>
+            <button onclick="toggleCart()" class="vibe-btn" style="margin-top:10px;">Start Shopping</button>
+        </div>
+    `;
+}
 }
 
 function applyTheme() {
@@ -118,6 +128,40 @@ if (themeBtn) {
         document.body.classList.toggle('light-mode', !isDark);
         localStorage.setItem('vibe', isDark ? 'dark-mode' : 'light-mode');
     });
+}
+
+function filterProducts() {
+    const query = document.getElementById('product-search').value.toLowerCase();
+    const filtered = products.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        p.desc.toLowerCase().includes(query)
+    );
+    renderGrid(filtered);
+}
+
+function renderGrid(productsArray) {
+    const grid = document.getElementById('catalog-grid');
+    if (!grid) return;
+    
+    if (productsArray.length === 0) {
+        grid.innerHTML = `<div class="no-results">Bhai, nothing found for that search! 🔍</div>`;
+        return;
+    }
+
+    grid.innerHTML = productsArray.map(p => `
+        <div class="card">
+            <div class="card-img-container">
+                <img src="https://images.unsplash.com/photo-${p.imgID}?auto=format&fit=crop&w=600&q=80" 
+                     alt="${p.name}" onclick="viewProduct(${p.id})">
+            </div>
+            <div class="card-content">
+                <h3 onclick="viewProduct(${p.id})">${p.name}</h3>
+                <p>${p.desc}</p>
+                <div class="price">₹${p.price.toLocaleString('en-IN')}</div>
+                <button class="add-btn" onclick="addToCart(${p.id})">Add to Bag</button>
+            </div>
+        </div>
+    `).join('');
 }
 
 window.onload = () => {
@@ -160,6 +204,7 @@ function initCatalog() {
             </div>
         `;
     }).join('');
+    renderGrid(products);
 }
 
 function initProductDetail() {
@@ -349,6 +394,37 @@ function simulateSuccess() {
         document.getElementById('main-checkout-view').style.display = "none";
         document.getElementById('tracker-view').style.display = "block";
         document.getElementById('order-id-display').innerText = orderId;
+
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#ff4500', '#00ffcc', '#ffffff']
+        });
+
+        const duration = 3 * 1000;
+        const end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 3,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ff4500']
+            });
+            confetti({
+                particleCount: 3,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#00ffcc']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
 
         const container = document.querySelector('.order-success-card');
         const invoiceBtn = document.createElement('button');
