@@ -317,7 +317,7 @@ function handleImgError(image) {
 function viewProduct(id) {
     window.location.href = `product.html?id=${id}`;
 }
-// Open Modal
+
 function openPaymentGateway() {
     if (Object.keys(cart).length === 0) return alert("Bhai, cart khali hai!");
     const total = document.getElementById('grand-total').innerText;
@@ -326,7 +326,6 @@ function openPaymentGateway() {
     document.getElementById('payment-modal').style.display = "flex";
 }
 
-// Tab Switching
 function switchTab(evt, tabId) {
     const panels = document.querySelectorAll('.tab-panel');
     const tabs = document.querySelectorAll('.pay-tab');
@@ -337,34 +336,31 @@ function switchTab(evt, tabId) {
     evt.currentTarget.classList.add('active');
 }
 
-// Simulation & Invoice
 function simulateSuccess() {
     const payBtn = document.querySelector('.pay-now-btn');
     payBtn.innerText = "Processing Payment...";
     payBtn.disabled = true;
 
-    // Grab purchase details for the invoice
     const orderId = "#DA-" + document.getElementById('razor-order-id').innerText;
     const finalTotal = document.getElementById('grand-total').innerText;
     const itemsList = Object.values(cart).map(i => `${i.name} (x${i.qty}) - ₹${i.price * i.qty}`).join('\n');
-
     setTimeout(() => {
         document.getElementById('payment-modal').style.display = "none";
         document.getElementById('main-checkout-view').style.display = "none";
         document.getElementById('tracker-view').style.display = "block";
         document.getElementById('order-id-display').innerText = orderId;
 
-        // Auto-add Invoice Download Button
         const container = document.querySelector('.order-success-card');
         const invoiceBtn = document.createElement('button');
         invoiceBtn.className = "vibe-btn";
-        invoiceBtn.style.background = "#2ecc71";
         invoiceBtn.style.marginTop = "20px";
+        invoiceBtn.style.background = "var(--accent)"; 
+        invoiceBtn.style.color = "white"; 
+        invoiceBtn.style.border = "none";
         invoiceBtn.innerHTML = "Download Invoice 📄";
         invoiceBtn.onclick = () => generateInvoice(orderId, finalTotal, itemsList);
         container.appendChild(invoiceBtn);
 
-        // Clear Cart
         cart = {};
         localStorage.removeItem('myCart');
         updateCartUI();
