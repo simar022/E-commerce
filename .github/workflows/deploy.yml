@@ -1,32 +1,34 @@
-name: Digi-Adda Deployment
+name: Production Deployment
 
 on:
   push:
     branches:
-      - master  
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
-        
-      - name: Deploy to Server
+
+      - name: Sync Files to Azure VM
         uses: easingthemes/ssh-deploy@main
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          # We use -rltvz instead of -avz to avoid permission sync errors
-          # --no-perms --no-owner --no-group stops rsync from trying to be 'root'
-          ARGS: "-rltvz --no-perms --no-owner --no-group --delete"
+          # -r: recursive
+          # -v: verbose
+          # -z: compress
+          # --no-perms/owner/group: ignores metadata conflicts that cause 'Permission Denied'
+          ARGS: "-rvz --no-perms --no-owner --no-group --delete"
           SOURCE: "./"
           REMOTE_HOST: ${{ secrets.VM_IP }}
           REMOTE_USER: ${{ secrets.VM_USERNAME }}
-          TARGET: "/var/www/html"
+          TARGET: "/var/www/html" # Using the custom folder we created
           EXCLUDE: "/.git/, /.github/, /node_modules/"
 
-      - name: Reload Nginx
+      - name: Restart Nginx
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VM_IP }}
