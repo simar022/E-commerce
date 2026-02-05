@@ -1,0 +1,30 @@
+name: Deploy to Nginx VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VM_IP }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # "." selects everything in the current workspace (your repo)
+          source: "."
+          # target is the destination on your VM
+          target: "/var/www/html"
+          # rm: true deletes existing files in /var/www/html before uploading new ones
+          rm: true
+          # This is the secret sauce: it prevents the action from 
+          # creating a folder named after your repo inside /var/www/html
+          strip_components: 0
