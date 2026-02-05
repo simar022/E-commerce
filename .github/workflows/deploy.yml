@@ -3,7 +3,7 @@ name: Digi-Adda Deployment
 on:
   push:
     branches:
-      - main  
+      - master  
 
 permissions:
   contents: read
