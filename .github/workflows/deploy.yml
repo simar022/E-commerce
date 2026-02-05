@@ -26,7 +26,7 @@ jobs:
           SOURCE: "./"              
           REMOTE_HOST: ${{ secrets.VM_IP }}
           REMOTE_USER: ${{ secrets.VM_USERNAME }}
-          TARGET: "/var/www/html"       
+          TARGET: "/var/www/html/"       
           EXCLUDE: "/.git/, /.github/"  
 
       - name: Reload Nginx
